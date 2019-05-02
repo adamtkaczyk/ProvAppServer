@@ -2,7 +2,7 @@ package com.ita.provapp.server;
 
 import java.util.ArrayList;
 
-public class AccountManagerTest extends AccountsManager {
+public class AccountManagerTemporary extends AccountsManager {
     private ArrayList<User> users = new ArrayList<>();
 
 
