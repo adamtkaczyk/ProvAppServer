@@ -1,5 +1,6 @@
 package com.ita.provapp.server;
 
+import com.ita.provapp.server.json.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,43 +18,21 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Authentication authentication(@RequestBody Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
-        User user = findUser(credential.getUser());
-        //TODO: check if password (password hash) is correct
-        if (credential.getPassword().equals("admin1")) {
-            return new Authentication(AccountsManager.generateAuthotoken(credential.getUser()), user);
-        } else {
-            logger.warn("Incorrect password for user: " + credential.getUser());
-            throw new PasswordIncorrectException();
-        }
+        return acccountsManager.authenticate(credential);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addUser(@RequestBody NewUser user) throws EntityExistsException{
-        if(acccountsManager.userExists(user.getUsername())) {
-            logger.warn("Cannot add new user. User: '" + user.getUsername() + "' exists");
-            throw new EntityExistsException("Cannot add new user. User: '" + user.getUsername() + "' already exists");
-        } else {
-            logger.info("Add new user: " + user.getUsername());
-            acccountsManager.addUser(user);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
+    public ResponseEntity addUser(@RequestBody NewUser user) throws EntityExistsException {
+        logger.info("Add new user: " + user.getUsername());
+        acccountsManager.addUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public User getUser(@PathVariable String username) throws EntityNotFoundException {
-            return findUser(username);
-    }
-
-    private User findUser(String username) throws EntityNotFoundException {
-        if(acccountsManager.userExists(username)) {
-            logger.debug("Found user: " + username);
-            return acccountsManager.getUser(username);
-        } else {
-            logger.warn("User: " + username + " not exists.");
-            throw new EntityNotFoundException("User: " + username + " not exists.");
-        }
+    public User getUser(@PathVariable String username, @RequestBody AuthToken authToken) throws AuthTokenIncorrectException, EntityNotFoundException {
+        return acccountsManager.getUserByToken(username, authToken.getToken());
     }
 }
 
@@ -72,5 +51,11 @@ class EntityExistsException extends  Throwable {
 class PasswordIncorrectException extends Throwable {
     public PasswordIncorrectException() {
         super("Password incorrect");
+    }
+}
+
+class AuthTokenIncorrectException extends Throwable {
+    public AuthTokenIncorrectException() {
+        super("AuthToken incorrect");
     }
 }

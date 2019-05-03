@@ -1,5 +1,6 @@
 package com.ita.provapp.server;
 
+import com.ita.provapp.server.json.ErrorMessage;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,13 @@ public class ProvAppExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     protected ErrorMessage handlerPasswordIncorrectException(PasswordIncorrectException ex) {
+        return new ErrorMessage(ex.getMessage());
+    }
+
+    @ExceptionHandler(AuthTokenIncorrectException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    protected ErrorMessage handlerAuthTokenIncorrectException(AuthTokenIncorrectException ex) {
         return new ErrorMessage(ex.getMessage());
     }
 }

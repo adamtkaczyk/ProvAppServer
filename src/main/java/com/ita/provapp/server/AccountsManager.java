@@ -1,5 +1,9 @@
 package com.ita.provapp.server;
 
+import com.ita.provapp.server.json.Authentication;
+import com.ita.provapp.server.json.Credential;
+import com.ita.provapp.server.json.NewUser;
+import com.ita.provapp.server.json.User;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +17,22 @@ public abstract class AccountsManager{
 
     private static Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
-    public abstract void addUser(NewUser user);
-    public abstract User getUser(String username);
-    public abstract boolean userExists(String username);
+    public abstract void addUser(NewUser user) throws EntityExistsException;
+    public abstract User getUserByToken(String username, String password) throws EntityNotFoundException, AuthTokenIncorrectException;
 
-    public static String generateAuthotoken(String username) {
+    protected abstract void saveToken(String token);
+    protected abstract User getUserByPassword(String username, String password) throws EntityNotFoundException, PasswordIncorrectException;
+
+
+    public Authentication authenticate(Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
+        User user = getUserByPassword(credential.getUser(),credential.getPassword());
+        String token = AccountsManager.generateAuthToken(credential.getUser());
+        saveToken(token);
+
+        return new Authentication(token, user);
+    }
+
+    public static String generateAuthToken(String username) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
 
@@ -31,5 +46,9 @@ public abstract class AccountsManager{
         logger.info("Create new token: " + token);
 
         return token;
+    }
+
+    public static String generatePasswordHash(String password) {
+        return password;
     }
 }

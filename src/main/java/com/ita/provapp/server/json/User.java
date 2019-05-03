@@ -1,4 +1,4 @@
-package com.ita.provapp.server;
+package com.ita.provapp.server.json;
 
 import java.util.Date;
 
