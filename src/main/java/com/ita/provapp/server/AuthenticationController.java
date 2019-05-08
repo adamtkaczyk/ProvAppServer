@@ -17,7 +17,8 @@ public class AuthenticationController {
     @RequestMapping(value = "/authtoken", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Authentication authentication(@RequestBody Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
+    public LoginUser authentication(@RequestBody Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
+        logger.info("LoginUser request, user=[" + credential.getUser() + "]");
         return acccountsManager.authenticate(credential);
     }
 
@@ -31,8 +32,9 @@ public class AuthenticationController {
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public User getUser(@PathVariable String username, @RequestBody AuthToken authToken) throws AuthTokenIncorrectException, EntityNotFoundException {
-        return acccountsManager.getUserByToken(username, authToken.getToken());
+    public User getUser(@PathVariable String username, @RequestHeader("Authorization") String authToken) throws AuthTokenIncorrectException, EntityNotFoundException {
+        logger.info("Get user request. Username: " + username + " , token: " + authToken);
+        return acccountsManager.getUserByToken(username, authToken);
     }
 }
 

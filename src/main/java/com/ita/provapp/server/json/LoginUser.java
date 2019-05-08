@@ -1,8 +1,8 @@
 package com.ita.provapp.server.json;
 
-public class Authentication {
+public class LoginUser {
 
-    public Authentication(String authtoken, User user) {
+    public LoginUser(String authtoken, User user) {
         this.authtoken = authtoken;
         this.user = user;
     }

@@ -1,6 +1,6 @@
 package com.ita.provapp.server;
 
-import com.ita.provapp.server.json.Authentication;
+import com.ita.provapp.server.json.LoginUser;
 import com.ita.provapp.server.json.Credential;
 import com.ita.provapp.server.json.NewUser;
 import com.ita.provapp.server.json.User;
@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public abstract class AccountsManager{
+public abstract class AccountsManager {
 
     private static Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
@@ -24,12 +24,12 @@ public abstract class AccountsManager{
     protected abstract User getUserByPassword(String username, String password) throws EntityNotFoundException, PasswordIncorrectException;
 
 
-    public Authentication authenticate(Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
+    public LoginUser authenticate(Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
         User user = getUserByPassword(credential.getUser(),credential.getPassword());
         String token = AccountsManager.generateAuthToken(credential.getUser());
         saveToken(token);
 
-        return new Authentication(token, user);
+        return new LoginUser(token, user);
     }
 
     public static String generateAuthToken(String username) {
