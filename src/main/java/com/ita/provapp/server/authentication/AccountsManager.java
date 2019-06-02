@@ -1,4 +1,4 @@
-package com.ita.provapp.server;
+package com.ita.provapp.server.authentication;
 
 import com.ita.provapp.server.json.LoginUser;
 import com.ita.provapp.server.json.Credential;

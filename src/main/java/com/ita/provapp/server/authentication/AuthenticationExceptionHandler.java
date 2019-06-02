@@ -1,4 +1,4 @@
-package com.ita.provapp.server;
+package com.ita.provapp.server.authentication;
 
 import com.ita.provapp.server.json.ErrorMessage;
 import org.springframework.core.Ordered;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class ProvAppExceptionHandler extends ResponseEntityExceptionHandler {
+public class AuthenticationExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

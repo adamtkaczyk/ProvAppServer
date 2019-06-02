@@ -1,4 +1,4 @@
-package com.ita.provapp.server;
+package com.ita.provapp.server.authentication;
 
 import com.ita.provapp.server.json.*;
 import org.slf4j.Logger;
@@ -18,12 +18,14 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public LoginUser authentication(@RequestBody Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
+        //TODO: set location header
         logger.info("LoginUser request, user=[" + credential.getUser() + "]");
         return acccountsManager.authenticate(credential);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addUser(@RequestBody NewUser user) throws EntityExistsException {
+        //TODO: set location header
         logger.info("Add new user: " + user.getUsername());
         acccountsManager.addUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);

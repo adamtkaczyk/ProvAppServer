@@ -15,6 +15,7 @@ public class MailSender {
     private static Logger logger = LoggerFactory.getLogger(MailSender.class);
 
     public MailSender(String host, int port, String username, String password) {
+        logger.info(String.format("Create MailSender object host: [%s], port: [%d], from:  [%s], password: [%s]",host,port,username,password));
         this.host = host;
         this.username = username;
         this.password = password;
@@ -37,7 +38,7 @@ public class MailSender {
                 });
 
         try {
-            logger.debug(String.format("Email sending from address: [%s] to: [%s], subject: [%s], message: [%s]", host, toAddress, subject, host ));
+            logger.info(String.format("Email sending from address: [%s] to: [%s], subject: [%s], message: [%s]", username, toAddress, subject, text));
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
