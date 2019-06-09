@@ -1,53 +1,34 @@
 package com.ita.provapp.server.authentication;
 
+import com.ita.provapp.server.exceptions.EntityExistsException;
+import com.ita.provapp.server.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.json.DBUser;
 import com.ita.provapp.server.json.NewUser;
 import com.ita.provapp.server.json.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Random;
 
 import java.util.ArrayList;
-
-class DBUser {
-    private User user;
-    private String passwordHash;
-
-    public DBUser(User user, String passwordHash) {
-        this.passwordHash = passwordHash;
-        this.user = user;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-}
 
 public class AccountManagerTemporary extends AccountsManager {
     private ArrayList<DBUser> users = new ArrayList<>();
     private static Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
-
+    private Random rand = new Random();
 
     @Override
-    public void addUser(NewUser user) throws EntityExistsException {
+    public Integer addUser(NewUser user) throws EntityExistsException {
+        Integer userId = rand.nextInt(Integer.MAX_VALUE);
         if(userExists(user.getUsername())) {
             logger.warn("Cannot add new user. User: '" + user.getUsername() + "' exists");
             throw new EntityExistsException("Cannot add new user. User: '" + user.getUsername() + "' already exists");
         } else {
             users.add(new DBUser(
-                    new User(user.getUsername(),user.getName(),user.getSurname(),user.getEmail()),
+                    new User(userId,user.getUsername(),user.getName(),user.getSurname(),user.getEmail()),
                     AccountsManager.generatePasswordHash(user.getPassword())));
         }
+
+        return userId;
     }
 
     @Override
@@ -71,6 +52,13 @@ public class AccountManagerTemporary extends AccountsManager {
     }
 
     @Override
+    protected User getUserByToken(Integer userId, String token) throws EntityNotFoundException, AuthTokenIncorrectException {
+        if(token.isEmpty())
+            throw new AuthTokenIncorrectException();
+        return findUser(userId).getUser();
+    }
+
+    @Override
     protected void saveToken(String token) {
 
     }
@@ -79,10 +67,17 @@ public class AccountManagerTemporary extends AccountsManager {
         return users.stream().anyMatch(user -> user.getUser().getUsername().equals(username));
     }
 
+    public boolean userExists(Integer userID) {
+        return users.stream().anyMatch(user -> user.getUser().getUserID().equals(userID));
+    }
+
     public DBUser getUser(String username) {
         return users.stream().filter(user -> user.getUser().getUsername().equals(username)).findFirst().get();
     }
 
+    public DBUser getUser(Integer userID) {
+        return users.stream().filter(user -> user.getUser().getUserID().equals(userID)).findFirst().get();
+    }
 
     private DBUser findUser(String username) throws EntityNotFoundException {
         if(userExists(username)) {
@@ -91,6 +86,16 @@ public class AccountManagerTemporary extends AccountsManager {
         } else {
             logger.warn("User: " + username + " not exists.");
             throw new EntityNotFoundException("User: " + username + " not exists.");
+        }
+    }
+
+    private DBUser findUser(Integer userID) throws EntityNotFoundException {
+        if(userExists(userID)) {
+            logger.debug("Found user: " + userID);
+            return getUser(userID);
+        } else {
+            logger.warn("User: " + userID + " not exists.");
+            throw new EntityNotFoundException("User: " + userID + " not exists.");
         }
     }
 }

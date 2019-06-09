@@ -1,5 +1,7 @@
 package com.ita.provapp.server.authentication;
 
+import com.ita.provapp.server.exceptions.EntityExistsException;
+import com.ita.provapp.server.exceptions.EntityNotFoundException;
 import com.ita.provapp.server.json.LoginUser;
 import com.ita.provapp.server.json.Credential;
 import com.ita.provapp.server.json.NewUser;
@@ -17,12 +19,13 @@ public abstract class AccountsManager {
 
     private static Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
-    public abstract void addUser(NewUser user) throws EntityExistsException;
+    public abstract Integer addUser(NewUser user) throws EntityExistsException;
     public abstract User getUserByToken(String username, String password) throws EntityNotFoundException, AuthTokenIncorrectException;
 
     protected abstract void saveToken(String token);
     protected abstract User getUserByPassword(String username, String password) throws EntityNotFoundException, PasswordIncorrectException;
 
+    protected abstract User getUserByToken(Integer userId, String token) throws EntityNotFoundException, AuthTokenIncorrectException;
 
     public LoginUser authenticate(Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
         User user = getUserByPassword(credential.getUser(),credential.getPassword());

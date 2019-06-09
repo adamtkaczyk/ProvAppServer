@@ -1,7 +1,10 @@
 package com.ita.provapp.server.json;
 
+import javax.validation.constraints.NotNull;
+
 public class NewUser extends User {
 
+    @NotNull(message = "Password can not be empty")
     private String password;
 
     public NewUser(String username, String name, String surname, /*Date dateOfBirth,*/ String email, String password) {
