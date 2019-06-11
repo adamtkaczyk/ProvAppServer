@@ -1,20 +1,25 @@
 package com.ita.provapp.server.json;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class User {
 
     private Integer userID;
-    @NotNull
+    @NotNull(message = "Username can't be empty")
     private String username;
-    @NotNull
+    @NotNull(message = "Name can't be empty")
     private String name;
-    @NotNull
+    @NotNull(message = "Surname can't be empty")
     private String surname;
     //private Date dateOfBirth;
-    @NotNull
+    @Email
     private String email;
+
+    public User() {
+
+    }
 
     public User(Integer userID, String username, String name, String surname, String email) {
         this(username,name,surname,email);

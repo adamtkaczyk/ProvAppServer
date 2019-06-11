@@ -2,46 +2,30 @@ package com.ita.provapp.server.json;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Order {
-    public class OrderPosition {
-        public OrderPosition(Integer number, Product product) {
-            this.number = number;
-            this.product = product;
-        }
-
-        @NotNull
-        @Min(0)
-        private Integer number;
-        @NotNull
-        private Product product;
-
-        public Integer getNumber() {
-            return number;
-        }
-
-        public void setNumber(Integer number) {
-            this.number = number;
-        }
-
-        public Product getProduct() {
-            return product;
-        }
-
-        public void setProduct(Product product) {
-            this.product = product;
-        }
-    }
-
     private Integer orderID;
+
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-    List<OrderPosition> orderPositions = new ArrayList<>();
+
+    @NotEmpty
+    private List<OrderPosition> orderPositions = new ArrayList<>();
+
+    @Valid
+    private User user;
+
+    public Order() {
+        createTime = new Date();
+    }
 
     public Order(Date createTime) {
         this.createTime = createTime;
@@ -50,6 +34,13 @@ public class Order {
     public Order(Integer orderID, Date createTime) {
         this(createTime);
         this.orderID = orderID;
+    }
+
+    public Order(Integer orderID, Date createTime, User user, List<OrderPosition> orderPositions) {
+        this.orderID = orderID;
+        this.createTime = createTime;
+        this.user = user;
+        this.orderPositions = orderPositions;
     }
 
     public Integer getOrderID() {
@@ -78,5 +69,21 @@ public class Order {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<OrderPosition> getOrderPosition() {
+        return orderPositions;
+    }
+
+    public void setOrderPosition(List<OrderPosition> orderPositions) {
+        this.orderPositions = orderPositions;
     }
 }

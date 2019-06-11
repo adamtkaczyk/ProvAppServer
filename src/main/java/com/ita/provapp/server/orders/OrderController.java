@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -31,14 +33,12 @@ public class OrderController {
     }
 
     @RequestMapping( method = RequestMethod.POST)
-    public ResponseEntity createOrder(@RequestBody Order order, @RequestHeader("Authorization") String authToken) throws MailSenderException, AuthTokenIncorrectException {
+    public ResponseEntity createOrder(@Valid @RequestBody Order order, @RequestHeader("Authorization") String authToken) throws MailSenderException, AuthTokenIncorrectException {
         logger.info(String.format("Received new order request, token: [%s]",authToken));
         Integer orderID = orderManager.addOrder(order,authToken);
         String location = String.format("/order/%d",orderID);
 
-        //throw new MailSenderException("");
-
-        mailSender.send(conf.getValue("provapp.email.to"), "This is Subject", "This is Body");
+        //mailSender.send(conf.getValue("provapp.email.to"), "This is Subject", "This is Body");
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Location",location);

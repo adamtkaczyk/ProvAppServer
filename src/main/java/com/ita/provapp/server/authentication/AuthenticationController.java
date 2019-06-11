@@ -22,16 +22,23 @@ public class AuthenticationController {
     @RequestMapping(value = "/authtoken", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public LoginUser authentication(@RequestBody Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
+    public ResponseEntity<LoginUser> authentication(@RequestBody Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
         logger.info("POST /user/authtoken. LoginUser request, user=[" + credential.getUser() + "]");
-        return acccountsManager.authenticate(credential);
+        LoginUser user = acccountsManager.authenticate(credential);
+
+        String location = String.format("/user/%s",user.getUser().getUsername());
+        logger.info(String.format("User log in location=[%s]",location));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Location",location);
+        return new ResponseEntity<>(user,headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addUser(@Valid @RequestBody NewUser user) throws EntityExistsException {
         logger.info("POST /user. Add new user request: " + user.getUsername());
         Integer userID = acccountsManager.addUser(user);
-        String location = String.format("/user/%d",userID);
+        String location = String.format("/user/%s",user.getUsername());
         logger.info(String.format("User add successfully in location=[%s]",location));
 
         HttpHeaders headers = new HttpHeaders();
@@ -39,21 +46,21 @@ public class AuthenticationController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    /*@RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public User getUser(@PathVariable String username, @RequestHeader("Authorization") String authToken) throws AuthTokenIncorrectException, EntityNotFoundException {
         logger.info("Get user request. Username: " + username + " , token: " + authToken);
         return acccountsManager.getUserByToken(username, authToken);
-    }*/
+    }
 
-    @RequestMapping(value = "/{userID}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/{userID}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public User getUser(@PathVariable Integer userID, @RequestHeader("Authorization") String authToken) throws AuthTokenIncorrectException, EntityNotFoundException {
         logger.info(String.format("GET /user/%d. Get user request. UserID: [%s] , token: [%s]", userID, userID, authToken));
         return acccountsManager.getUserByToken(userID, authToken);
-    }
+    }*/
 
     public void setAcccountsManager(AccountsManager acccountsManager) {
         this.acccountsManager = acccountsManager;
