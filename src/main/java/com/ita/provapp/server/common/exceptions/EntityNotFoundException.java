@@ -1,4 +1,4 @@
-package com.ita.provapp.server.exceptions;
+package com.ita.provapp.server.common.exceptions;
 
 public class EntityNotFoundException extends Throwable {
     public EntityNotFoundException(String message) {

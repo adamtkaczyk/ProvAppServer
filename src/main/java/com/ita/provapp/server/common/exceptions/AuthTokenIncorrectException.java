@@ -1,4 +1,4 @@
-package com.ita.provapp.server.authentication;
+package com.ita.provapp.server.common.exceptions;
 
 public class AuthTokenIncorrectException extends Throwable {
     public AuthTokenIncorrectException() {

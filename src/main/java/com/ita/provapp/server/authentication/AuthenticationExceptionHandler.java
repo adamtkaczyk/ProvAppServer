@@ -1,27 +1,19 @@
 package com.ita.provapp.server.authentication;
 
-import com.ita.provapp.server.exceptions.EntityExistsException;
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.ErrorMessage;
+import com.ita.provapp.server.common.exceptions.AuthTokenIncorrectException;
+import com.ita.provapp.server.common.exceptions.EntityExistsException;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.exceptions.PasswordIncorrectException;
+import com.ita.provapp.server.common.json.ErrorMessage;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class AuthenticationExceptionHandler extends ResponseEntityExceptionHandler {
+public class AuthenticationExceptionHandler extends com.ita.provapp.server.ExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
@@ -33,7 +25,7 @@ public class AuthenticationExceptionHandler extends ResponseEntityExceptionHandl
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     protected ErrorMessage handlerEntityExistsException(EntityExistsException ex) {
-        return new ErrorMessage(ex.getMessage());
+        return new ErrorMessage(ex.getMessage(), 409);
     }
 
     @ExceptionHandler(PasswordIncorrectException.class)
@@ -48,27 +40,5 @@ public class AuthenticationExceptionHandler extends ResponseEntityExceptionHandl
     @ResponseBody
     protected ErrorMessage handlerAuthTokenIncorrectException(AuthTokenIncorrectException ex) {
         return new ErrorMessage(ex.getMessage());
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", new Date());
-        body.put("status", status.value());
-
-        //Get all errors
-        List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(x -> x.getDefaultMessage())
-                .collect(Collectors.toList());
-
-        body.put("errors", errors);
-
-        return new ResponseEntity<>(body, headers, status);
-
     }
 }

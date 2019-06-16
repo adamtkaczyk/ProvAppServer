@@ -1,21 +1,25 @@
 package com.ita.provapp.server.authentication;
 
-import com.ita.provapp.server.exceptions.EntityExistsException;
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.LoginUser;
-import com.ita.provapp.server.json.Credential;
-import com.ita.provapp.server.json.NewUser;
-import com.ita.provapp.server.json.User;
+import com.ita.provapp.server.common.exceptions.AuthTokenIncorrectException;
+import com.ita.provapp.server.common.exceptions.EntityExistsException;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.exceptions.PasswordIncorrectException;
+import com.ita.provapp.server.common.json.LoginUser;
+import com.ita.provapp.server.common.json.Credential;
+import com.ita.provapp.server.common.json.NewUser;
+import com.ita.provapp.server.common.json.User;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public abstract class AccountsManager {
+@Service
+public abstract class AccountsService {
 
     private static Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
@@ -29,7 +33,7 @@ public abstract class AccountsManager {
 
     public LoginUser authenticate(Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
         User user = getUserByPassword(credential.getUser(),credential.getPassword());
-        String token = AccountsManager.generateAuthToken(credential.getUser());
+        String token = AccountsService.generateAuthToken(credential.getUser());
         saveToken(token);
 
         return new LoginUser(token, user);

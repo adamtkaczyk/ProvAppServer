@@ -1,7 +1,7 @@
 package com.ita.provapp.server.products;
 
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.Product;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.json.Product;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.ita.provapp.server.orders;
 
-import com.ita.provapp.server.authentication.AuthTokenIncorrectException;
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.Order;
+import com.ita.provapp.server.common.exceptions.AuthTokenIncorrectException;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.json.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package com.ita.provapp.server.orders;
 
-import com.ita.provapp.server.json.ErrorMessage;
+import com.ita.provapp.server.common.json.ErrorMessage;
 import com.ita.provapp.server.mailsender.MailSenderException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

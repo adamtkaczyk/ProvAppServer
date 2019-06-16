@@ -1,8 +1,7 @@
-package com.ita.provapp.server.json;
+package com.ita.provapp.server.common.json;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 public class User {
 

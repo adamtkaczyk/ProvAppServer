@@ -1,4 +1,4 @@
-package com.ita.provapp.server.json;
+package com.ita.provapp.server.common.json;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

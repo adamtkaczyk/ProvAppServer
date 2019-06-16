@@ -1,16 +1,14 @@
 package com.ita.provapp.server.orders;
 
 import com.ita.provapp.server.AppConfiguration;
-import com.ita.provapp.server.authentication.AuthTokenIncorrectException;
-import com.ita.provapp.server.authentication.AuthenticationController;
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.ErrorMessage;
-import com.ita.provapp.server.json.Order;
+import com.ita.provapp.server.common.exceptions.AuthTokenIncorrectException;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.json.ErrorMessage;
+import com.ita.provapp.server.common.json.Order;
 import com.ita.provapp.server.mailsender.MailSender;
 import com.ita.provapp.server.mailsender.MailSenderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
 
     private OrderManager orderManager = new OrderManagerTemporary();
     private AppConfiguration conf = AppConfiguration.getInstance();
     private MailSender mailSender;
-    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+    Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     public OrderController() {
         int port = Integer.parseInt(conf.getValue("provapp.email.port"));

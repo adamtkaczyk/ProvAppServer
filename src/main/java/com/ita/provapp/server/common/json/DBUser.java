@@ -1,4 +1,4 @@
-package com.ita.provapp.server.json;
+package com.ita.provapp.server.common.json;
 
 public class DBUser {
     private User user;

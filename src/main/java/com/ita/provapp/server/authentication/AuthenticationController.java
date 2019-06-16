@@ -1,30 +1,39 @@
 package com.ita.provapp.server.authentication;
 
-import com.ita.provapp.server.exceptions.EntityExistsException;
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.*;
+import com.ita.provapp.server.common.exceptions.AuthTokenIncorrectException;
+import com.ita.provapp.server.common.exceptions.EntityExistsException;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.exceptions.PasswordIncorrectException;
+import com.ita.provapp.server.common.json.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
+@EnableWebMvc
 public class AuthenticationController {
 
-    private AccountsManager acccountsManager = new AccountManagerTemporary();
+    @Autowired
+    private AccountsService accountsService;
+
     Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
-    @RequestMapping(value = "/authtoken", method = RequestMethod.POST)
+    @RequestMapping(value = "/authtokens", method = RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public ResponseEntity<LoginUser> authentication(@RequestBody Credential credential) throws EntityNotFoundException, PasswordIncorrectException {
-        logger.info("POST /user/authtoken. LoginUser request, user=[" + credential.getUser() + "]");
-        LoginUser user = acccountsManager.authenticate(credential);
+        System.out.println("Credential: " + credential.getUser() + " , password: " + credential.getPassword());
+        logger.info(String.format("POST /users/authtokens. LoginUser request, user=[%s]",credential.getUser()));
+        LoginUser user = accountsService.authenticate(credential);
 
         String location = String.format("/user/%s",user.getUser().getUsername());
         logger.info(String.format("User log in location=[%s]",location));
@@ -36,8 +45,8 @@ public class AuthenticationController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addUser(@Valid @RequestBody NewUser user) throws EntityExistsException {
-        logger.info("POST /user. Add new user request: " + user.getUsername());
-        Integer userID = acccountsManager.addUser(user);
+        logger.info(String.format("POST /users. Add new user request: [%s]", user.getUsername()));
+        Integer userID = accountsService.addUser(user);
         String location = String.format("/user/%s",user.getUsername());
         logger.info(String.format("User add successfully in location=[%s]",location));
 
@@ -46,12 +55,12 @@ public class AuthenticationController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public User getUser(@PathVariable String username, @RequestHeader("Authorization") String authToken) throws AuthTokenIncorrectException, EntityNotFoundException {
-        logger.info("Get user request. Username: " + username + " , token: " + authToken);
-        return acccountsManager.getUserByToken(username, authToken);
+        logger.info(String.format("GET /users/%s. Get user request. Username: [%s] , token: [%s]",username, username, authToken));
+        return accountsService.getUserByToken(username, authToken);
     }
 
     /*@RequestMapping(value = "/{userID}", method = RequestMethod.GET)
@@ -59,11 +68,11 @@ public class AuthenticationController {
     @ResponseBody
     public User getUser(@PathVariable Integer userID, @RequestHeader("Authorization") String authToken) throws AuthTokenIncorrectException, EntityNotFoundException {
         logger.info(String.format("GET /user/%d. Get user request. UserID: [%s] , token: [%s]", userID, userID, authToken));
-        return acccountsManager.getUserByToken(userID, authToken);
+        return accountsService.getUserByToken(userID, authToken);
     }*/
 
-    public void setAcccountsManager(AccountsManager acccountsManager) {
-        this.acccountsManager = acccountsManager;
+    public void setAccountsService(AccountsService accountsService) {
+        this.accountsService = accountsService;
     }
 }
 

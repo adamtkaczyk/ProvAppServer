@@ -1,8 +1,8 @@
 package com.ita.provapp.server.products;
 
-import com.ita.provapp.server.exceptions.EntityExistsException;
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.Product;
+import com.ita.provapp.server.common.exceptions.EntityExistsException;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.json.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -10,11 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductsController {
     Logger logger = LoggerFactory.getLogger(ProductsController.class);
     ProductsManager productsManager = new ProductsManagerTemporary();

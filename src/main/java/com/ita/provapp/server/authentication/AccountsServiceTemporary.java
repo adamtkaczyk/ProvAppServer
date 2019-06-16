@@ -1,17 +1,22 @@
 package com.ita.provapp.server.authentication;
 
-import com.ita.provapp.server.exceptions.EntityExistsException;
-import com.ita.provapp.server.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.json.DBUser;
-import com.ita.provapp.server.json.NewUser;
-import com.ita.provapp.server.json.User;
+import com.ita.provapp.server.common.exceptions.AuthTokenIncorrectException;
+import com.ita.provapp.server.common.exceptions.EntityExistsException;
+import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.common.exceptions.PasswordIncorrectException;
+import com.ita.provapp.server.common.json.DBUser;
+import com.ita.provapp.server.common.json.NewUser;
+import com.ita.provapp.server.common.json.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import java.util.Random;
 
 import java.util.ArrayList;
 
-public class AccountManagerTemporary extends AccountsManager {
+@Component("accountServiceTemporary")
+public class AccountsServiceTemporary extends AccountsService {
     private ArrayList<DBUser> users = new ArrayList<>();
     private static Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     private Random rand = new Random();
@@ -25,7 +30,7 @@ public class AccountManagerTemporary extends AccountsManager {
         } else {
             users.add(new DBUser(
                     new User(userId,user.getUsername(),user.getName(),user.getSurname(),user.getEmail()),
-                    AccountsManager.generatePasswordHash(user.getPassword())));
+                    AccountsService.generatePasswordHash(user.getPassword())));
         }
 
         return userId;
