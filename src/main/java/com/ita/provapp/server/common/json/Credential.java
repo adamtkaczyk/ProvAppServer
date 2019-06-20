@@ -1,7 +1,11 @@
 package com.ita.provapp.server.common.json;
 
+import javax.validation.constraints.NotEmpty;
+
 public class Credential {
+    @NotEmpty(message = "Username can't be empty")
     private String user;
+    @NotEmpty(message = "Password can't be empty")
     private String password;
 
     public Credential(String user, String password) {

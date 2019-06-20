@@ -1,29 +1,32 @@
 package com.ita.provapp.server.products;
 
-import com.ita.provapp.server.common.exceptions.EntityExistsException;
 import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
 import com.ita.provapp.server.common.json.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
     Logger logger = LoggerFactory.getLogger(ProductsController.class);
-    ProductsManager productsManager = new ProductsManagerTemporary();
+
+    @Autowired
+    ProductsService productsService;
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity addProduct(@RequestBody Product product) {
-        logger.info(String.format("POST /product. Add new product request, product name=[%s]",product.getName()));
-        int productID = productsManager.addProduct(product);
-        String location = String.format("/order/%d",productID);
+    public ResponseEntity addProduct(@Valid  @RequestBody Product product) {
+        logger.info(String.format("POST /products. Add new product request, product name=[%s]",product.getName()));
+        int productID = productsService.addProduct(product);
+        String location = String.format("/products/%d",productID);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Location",location);
@@ -33,14 +36,14 @@ public class ProductsController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<Product> getProductList() {
-        logger.info("GET /product. Get products list request");
-        return productsManager.getProducts();
+        logger.info("GET /products. Get products list request");
+        return productsService.getProducts();
     }
 
     @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public Product getProduct(@PathVariable Integer productId) throws EntityNotFoundException {
-        logger.info(String.format("GET /product/%d. Get products list request",productId));
-        return productsManager.getProduct(productId);
+        logger.info(String.format("GET /products/%d. Get product request",productId));
+        return productsService.getProduct(productId);
     }
 }

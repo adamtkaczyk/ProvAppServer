@@ -25,7 +25,7 @@ public class AccountsServiceTemporary extends AccountsService {
     public Integer addUser(NewUser user) throws EntityExistsException {
         Integer userId = rand.nextInt(Integer.MAX_VALUE);
         if(userExists(user.getUsername())) {
-            logger.warn("Cannot add new user. User: '" + user.getUsername() + "' exists");
+            logger.warn("Cannot add new user. User: '" + user.getUsername() + "' already exists");
             throw new EntityExistsException("Cannot add new user. User: '" + user.getUsername() + "' already exists");
         } else {
             users.add(new DBUser(

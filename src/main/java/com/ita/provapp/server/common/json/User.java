@@ -1,19 +1,20 @@
 package com.ita.provapp.server.common.json;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class User {
 
     private Integer userID;
-    @NotNull(message = "Username can't be empty")
+    @NotEmpty(message = "Username can't be empty")
     private String username;
-    @NotNull(message = "Name can't be empty")
+    @NotEmpty(message = "Name can't be empty")
     private String name;
-    @NotNull(message = "Surname can't be empty")
+    @NotEmpty(message = "Surname can't be empty")
     private String surname;
     //private Date dateOfBirth;
-    @Email
+    @Email(message = "Incorrect email address")
     private String email;
 
     public User() {
@@ -58,5 +59,22 @@ public class User {
 
     public void setUserID(Integer userID) {
         this.userID = userID;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
+            return true;
+        }
+
+        if (!(object instanceof User)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        User user = (User) object;
+
+        // Compare the data members and return accordingly
+        return username.equals(user.username) && name.equals(user.name) && surname.equals(user.surname) && email.equals(user.email);
     }
 }

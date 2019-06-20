@@ -15,12 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class OrderExceptionHandler extends ResponseEntityExceptionHandler {
+public class OrderExceptionHandler extends com.ita.provapp.server.ExceptionHandler {
 
     @ExceptionHandler(MailSenderException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     protected ErrorMessage handlerEntityNotFoundException(HttpServletRequest req, MailSenderException ex) {
-        return new ErrorMessage("Cannot process order");
+        return new ErrorMessage("Order do not exists");
     }
 }

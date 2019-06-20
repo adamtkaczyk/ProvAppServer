@@ -55,6 +55,10 @@ public abstract class AccountsService {
         return token;
     }
 
+    public boolean logout(String authtoken) {
+        return true;
+    }
+
     public static String generatePasswordHash(String password) {
         return password;
     }

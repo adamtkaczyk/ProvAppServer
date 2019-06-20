@@ -9,12 +9,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class OrderManagerTemporary extends OrderManager {
+public class OrderManagerTemporary {
     private ArrayList<Order> orders = new ArrayList<>();
     private static Logger logger = LoggerFactory.getLogger(OrderManagerTemporary.class);
     private Random rand = new Random();
 
-    @Override
     public Integer addOrder(Order order, String token) throws AuthTokenIncorrectException {
         if(token.isEmpty())
             throw new AuthTokenIncorrectException();
@@ -24,7 +23,6 @@ public class OrderManagerTemporary extends OrderManager {
         return orderID;
     }
 
-    @Override
     public Order getOrder(Integer orderId, String token) throws AuthTokenIncorrectException, EntityNotFoundException {
         if(token.isEmpty())
             throw new AuthTokenIncorrectException();

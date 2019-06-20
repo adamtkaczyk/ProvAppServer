@@ -1,6 +1,5 @@
 package com.ita.provapp.server.products;
 
-import com.ita.provapp.server.common.exceptions.EntityExistsException;
 import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
 import com.ita.provapp.server.common.json.Product;
 import org.slf4j.Logger;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ProductsManagerTemporary extends ProductsManager {
+public class ProductsManagerTemporary  {
     private List<Product> products = new ArrayList<>();
     private static Logger logger = LoggerFactory.getLogger(ProductsManagerTemporary.class);
     private Random random = new Random();
@@ -21,7 +20,6 @@ public class ProductsManagerTemporary extends ProductsManager {
         products.add(new Product(124,"product2",2234,"product2 description"));
     }
 
-    @Override
     public Integer addProduct(Product product) {
         Integer productId = random.nextInt(Integer.MAX_VALUE);
         product.setProductID(productId);
@@ -29,12 +27,10 @@ public class ProductsManagerTemporary extends ProductsManager {
         return productId;
     }
 
-    @Override
     public List<Product> getProducts() {
         return products;
     }
 
-    @Override
     public Product getProduct(Integer productId) throws EntityNotFoundException {
         return findProduct(productId);
     }

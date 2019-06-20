@@ -29,10 +29,10 @@ public class AuthenticationExceptionHandler extends com.ita.provapp.server.Excep
     }
 
     @ExceptionHandler(PasswordIncorrectException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     protected ErrorMessage handlerPasswordIncorrectException(PasswordIncorrectException ex) {
-        return new ErrorMessage(ex.getMessage());
+        return new ErrorMessage("Incorrect username or password");
     }
 
     @ExceptionHandler(AuthTokenIncorrectException.class)
