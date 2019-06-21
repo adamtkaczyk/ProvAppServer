@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class ProductsExceptionHandler extends com.ita.provapp.server.ExceptionHandler {
+public class ProductsExceptionHandler extends com.ita.provapp.server.common.ExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

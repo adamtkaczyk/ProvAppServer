@@ -1,4 +1,4 @@
-package com.ita.provapp.server;
+package com.ita.provapp.server.common;
 
 import com.ita.provapp.server.common.json.ErrorMessage;
 import org.springframework.core.Ordered;
