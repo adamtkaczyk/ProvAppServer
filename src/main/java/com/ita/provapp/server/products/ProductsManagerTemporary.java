@@ -1,7 +1,7 @@
 package com.ita.provapp.server.products;
 
-import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.common.json.Product;
+import com.ita.provapp.server.provappcommon.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.provappcommon.json.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package com.ita.provapp.server.orders;
 
-import com.ita.provapp.server.common.json.ErrorMessage;
+import com.ita.provapp.server.provappcommon.json.ErrorMessage;
 import com.ita.provapp.server.mailsender.MailSenderException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class OrderExceptionHandler extends com.ita.provapp.server.common.ExceptionHandler {
+public class OrderExceptionHandler extends com.ita.provapp.server.provappcommon.ExceptionHandler {
 
     @ExceptionHandler(MailSenderException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

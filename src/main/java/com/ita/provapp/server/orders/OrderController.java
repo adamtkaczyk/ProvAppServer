@@ -1,10 +1,8 @@
 package com.ita.provapp.server.orders;
 
-import com.ita.provapp.server.AppConfiguration;
-import com.ita.provapp.server.common.exceptions.AuthTokenIncorrectException;
-import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.common.json.Order;
-import com.ita.provapp.server.mailsender.MailSender;
+import com.ita.provapp.server.provappcommon.exceptions.AuthTokenIncorrectException;
+import com.ita.provapp.server.provappcommon.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.provappcommon.json.Order;
 import com.ita.provapp.server.mailsender.MailSenderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

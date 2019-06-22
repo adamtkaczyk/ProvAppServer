@@ -1,7 +1,7 @@
 package com.ita.provapp.server.products;
 
-import com.ita.provapp.server.common.exceptions.EntityNotFoundException;
-import com.ita.provapp.server.common.json.ErrorMessage;
+import com.ita.provapp.server.provappcommon.exceptions.EntityNotFoundException;
+import com.ita.provapp.server.provappcommon.json.ErrorMessage;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-public class ProductsExceptionHandler extends com.ita.provapp.server.common.ExceptionHandler {
+public class ProductsExceptionHandler extends com.ita.provapp.server.provappcommon.ExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
