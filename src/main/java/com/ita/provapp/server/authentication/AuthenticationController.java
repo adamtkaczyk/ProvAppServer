@@ -5,6 +5,7 @@ import com.ita.provapp.server.provappcommon.exceptions.EntityExistsException;
 import com.ita.provapp.server.provappcommon.exceptions.EntityNotFoundException;
 import com.ita.provapp.server.provappcommon.exceptions.PasswordIncorrectException;
 import com.ita.provapp.server.provappcommon.json.*;
+import com.ita.provapp.server.AppConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,8 @@ class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 public class AuthenticationController {
 
     private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
-    private static final String ENDPOINT_URL = "http://localhost:8081/users";
+    private AppConfiguration conf = AppConfiguration.getInstance();
+    private final String ENDPOINT_URL = conf.getValue("provapp.authenticator.host");// "http://provappauth:8081/users";
 
     /*@RequestMapping(value = "/authtokens", method = RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
@@ -76,6 +78,8 @@ public class AuthenticationController {
         HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
         RestTemplate restTemplate = new RestTemplate();
+
+        logger.info(String.format("Send REST request GET %s/%s", ENDPOINT_URL, username));
         return restTemplate.exchange(String.format("%s/%s", ENDPOINT_URL, username), HttpMethod.GET, entity, User.class);
     }
 

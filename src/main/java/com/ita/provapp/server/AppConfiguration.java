@@ -13,7 +13,7 @@ public class AppConfiguration {
 
     private AppConfiguration() {
         try {
-            InputStream input = new FileInputStream("src/main/resources/application_test.properties");
+            InputStream input = new FileInputStream("application_test.properties");
             properties.load(input);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
